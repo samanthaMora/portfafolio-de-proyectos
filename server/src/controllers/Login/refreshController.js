@@ -10,11 +10,11 @@ const refresh = (req, res) => {
   try {
     const decoded = jwt.verify(refreshToken, "StackRefresh");
     const newAccessToken = jwt.sign({ email: decoded.email }, "Stack", {
-      expiresIn: "1m",
+      expiresIn: "15m",
     });
-    console.log(`token renovado`);
     return res.status(200).json({ token: newAccessToken });
   } catch (err) {
+    console.log(err);
     return res.status(403).json({ message: "Refresh token inválido o expirado" });
   }
 };

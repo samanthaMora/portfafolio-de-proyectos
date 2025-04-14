@@ -3,11 +3,25 @@ import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./api/axiosConfig";
-import Login from "./components/Login/Login";
-import Register from "./components/Login/Register";
-import Home from "./components/Authenticated/Home/Home";
+
+
+// Páginas
+import Login from "./components/Pages/Login/Login";
+import Register from "./components/Pages/Login/Register";
+import Home from "./components/Pages/Authenticated/Home/Home.jsx";
+import Perfil from "./components/Pages/Authenticated/Perfil/Perfil.jsx";
+import Search from "./components/Pages/Search/Search.jsx";
+
+// Rutas protegidas
 import PrivateRoute from "./components/routes/PrivateRoute";
-import Perfil from './components/Authenticated/Perfil/Perfil';
+
+// Contexto de búsqueda
+import { SearchProvider } from "./hooks/Search/useSearchContext.jsx";
+
+
+
+
+
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
@@ -15,11 +29,16 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/register" element={<Register />} />
+
+
+        {/* Rutas protegidas con SearchProvider */}
         <Route
           path="/home"
           element={
             <PrivateRoute>
-              <Home />
+              <SearchProvider>
+                <Home />
+              </SearchProvider>
             </PrivateRoute>
           }
         />
@@ -27,8 +46,20 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           path="/home/perfil"
           element={
             <PrivateRoute>
-              <Perfil />
+              <SearchProvider>
+                <Perfil />
+              </SearchProvider>
             </PrivateRoute>
+          }
+        />
+
+        {/* Ruta pública de búsqueda */}
+        <Route
+          path="/search"
+          element={
+            <SearchProvider>
+              <Search />
+            </SearchProvider>
           }
         />
       </Routes>

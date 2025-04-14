@@ -101,7 +101,7 @@ npm run dev
 - Seguridad en backend con roles y validación de identidad
 - Exportación de base de datos SQL para fácil restauración
 
-## ✨ Autor
+
 
 ## ✨ Autor
 

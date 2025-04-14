@@ -1,9 +1,14 @@
 import React, { useState, useEffect } from "react";
-import useCreateProyects from "../../../hooks/Perfil/useCreateProyects";
-import useUpdateProyect from "../../../hooks/Perfil/useUpdateProyect";
-import useMyProyectList from "../../../hooks/Perfil/useMyProyectsList";
+import useCreateProyects from "../../../../hooks/Perfil/useCreateProyects";
+import useUpdateProyect from "../../../../hooks/Perfil/useUpdateProyect";
+import useMyProyectList from "../../../../hooks/Perfil/useMyProyectsList";
+import "../../../../styles/OverlayMessage.css";
 
-function CreateProyect({ setArrProyects, proyectoEnEdicion, setProyectoEnEdicion }) {
+function CreateProyect({
+  setArrProyects,
+  proyectoEnEdicion,
+  setProyectoEnEdicion,
+}) {
   const [titulo, setTitulo] = useState("");
   const [descripcion, setDescripcion] = useState("");
   const { create } = useCreateProyects();
@@ -39,29 +44,31 @@ function CreateProyect({ setArrProyects, proyectoEnEdicion, setProyectoEnEdicion
 
   return (
     <div className="container p-0 mt-4">
-      <h3 className="mb-4">{proyectoEnEdicion ? "Editar Proyecto" : "Crear Proyecto"}</h3>
+        <h3 className="mb-4 view-text">
+          {proyectoEnEdicion ? "Editar Proyecto" : "Crear Proyecto"}
+        </h3>
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
-          <label className="form-label">Título del Proyecto</label>
+            <label className="form-label view-text">Título del Proyecto</label>
           <input
             type="text"
-            className="form-control"
+            className="form-control glass-card"
             value={titulo}
             onChange={(e) => setTitulo(e.target.value)}
           />
         </div>
 
         <div className="mb-3">
-          <label className="form-label">Descripción</label>
+            <label className="form-label view-text">Descripción</label>
           <textarea
-            className="form-control"
+            className="form-control glass-card"
             rows="4"
             value={descripcion}
             onChange={(e) => setDescripcion(e.target.value)}
           ></textarea>
         </div>
 
-        <button type="submit" className="btn btn-primary">
+        <button type="submit" className="btn btn-primary view-button">
           {proyectoEnEdicion ? "Actualizar" : "Crear"}
         </button>
 
@@ -84,8 +91,3 @@ function CreateProyect({ setArrProyects, proyectoEnEdicion, setProyectoEnEdicion
 }
 
 export default CreateProyect;
-
-
-
-
-

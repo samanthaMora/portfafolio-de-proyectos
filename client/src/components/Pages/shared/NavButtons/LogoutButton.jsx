@@ -1,5 +1,5 @@
 import React from "react";
-import logout from "../../../utils/logout";
+import logout from "../../../../utils/logout.js";
 
 const LogoutButton = () => {
   return (

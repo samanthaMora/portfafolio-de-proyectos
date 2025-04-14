@@ -1,11 +1,14 @@
 import React from "react";
-import useDeleteProyect from "../../../hooks/Perfil/useDeleteProyect";
+import useDeleteProyect from "../../../../hooks/Perfil/useDeleteProyect.js";
+import "../../../../styles/OverlayMessage.css";
 
 function ProyectsList({ arrProyects, setArrProyects, setProyectoEnEdicion }) {
   const { eliminar } = useDeleteProyect();
 
   const handleDelete = async (id) => {
-    const confirm = window.confirm("¿Estás seguro de que quieres eliminar este proyecto?");
+    const confirm = window.confirm(
+      "¿Estás seguro de que quieres eliminar este proyecto?"
+    );
     if (!confirm) return;
 
     const success = await eliminar(id);
@@ -17,8 +20,8 @@ function ProyectsList({ arrProyects, setArrProyects, setProyectoEnEdicion }) {
 
   return (
     <div className="container mt-5">
-      <h3 className="mb-4">Mis Proyectos</h3>
-      <table className="table table-striped">
+        <h3 className="mb-4 view-text">Mis Proyectos</h3>
+      <table className="table table-striped glass-card">
         <thead>
           <tr className="table-success">
             <th>#</th>
@@ -64,8 +67,3 @@ function ProyectsList({ arrProyects, setArrProyects, setProyectoEnEdicion }) {
 }
 
 export default ProyectsList;
-
-
-
-
-

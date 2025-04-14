@@ -9,7 +9,7 @@ function BottonHome() {
   };
 
   return (
-    <button className="btn btn-primary" onClick={irAHome}>
+    <button className="btn btn-secondary" onClick={irAHome}>
       Ir a Home
     </button>
   );

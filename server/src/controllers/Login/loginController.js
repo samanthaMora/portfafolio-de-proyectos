@@ -24,7 +24,7 @@ const login = async (req, res) => {
     };
 
     const token = jwt.sign(payload, "Stack", {
-      expiresIn: "1m",
+      expiresIn: "15",
     });
 
     const refreshToken = jwt.sign(payload, "StackRefresh", {
