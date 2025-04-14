@@ -1,0 +1,11 @@
+# Node modules (cliente y servidor)
+client/node_modules/
+server/node_modules/
+
+# Entornos
+*.env
+
+# Archivos temporales
+.DS_Store
+*.log
+

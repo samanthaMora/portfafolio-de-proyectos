@@ -1,0 +1,46 @@
+{
+    "Servers": {
+        "1": {
+            "Name": "Postgres Enterprise Manager",
+            "Group": "Servers",
+            "Host": "localhost",
+            "Port": 5434,
+            "MaintenanceDB": "postgres",
+            "Username": "postgres",
+            "Comment": "Auto-detected Postgres Enterprise Manager installation with the data directory at C:\\Program Files\\PostgreSQL\\13\\data",
+            "KerberosAuthentication": false,
+            "ConnectionParameters": {
+                "sslmode": "prefer",
+                "connect_timeout": 10
+            }
+        },
+        "2": {
+            "Name": "Postgres Enterprise Manager",
+            "Group": "Servers",
+            "Host": "localhost",
+            "Port": 5433,
+            "MaintenanceDB": "postgres",
+            "Username": "postgres",
+            "Comment": "Auto-detected Postgres Enterprise Manager installation with the data directory at C:\\Program Files\\PostgreSQL\\16\\data",
+            "KerberosAuthentication": false,
+            "ConnectionParameters": {
+                "sslmode": "prefer",
+                "connect_timeout": 10
+            }
+        },
+        "3": {
+            "Name": "PostgreSQL 17",
+            "Group": "Servers",
+            "Host": "localhost",
+            "Port": 5432,
+            "MaintenanceDB": "postgres",
+            "Username": "postgres",
+            "Comment": "Auto-detected PostgreSQL 17 installation with the data directory at C:\\Program Files\\PostgreSQL\\17\\data",
+            "KerberosAuthentication": false,
+            "ConnectionParameters": {
+                "sslmode": "prefer",
+                "connect_timeout": 10
+            }
+        }
+    }
+}
