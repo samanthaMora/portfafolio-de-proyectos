@@ -1,37 +1,47 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import useAuthReady from "../General/useAuthReady.js";
+import renewToken from "../../utils/renewToken";
 
 const usePerfil = () => {
   const [userData, setUserData] = useState(null);
-  const [error, setError] = useState(null);
-  const ready = useAuthReady();
+  const [error, setError] = useState("");
 
   useEffect(() => {
-    if (!ready) return;
-
     const fetchPerfil = async () => {
-      try {
-        const token = localStorage.getItem("token");
+      let token = localStorage.getItem("accessToken");
 
-        const res = await axios.post(
-          "http://localhost:3000/perfil",
-          {},
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+      try {
+        const res = await axios.get("http://localhost:3000/perfil", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         setUserData(res.data);
       } catch (err) {
-        console.error("Error al obtener el perfil:", err);
-        setError("No se pudo cargar el perfil");
+        if (err.response?.status === 403) {
+          const newToken = await renewToken();
+          if (newToken) {
+            try {
+              const res2 = await axios.get("http://localhost:3000/perfil", {
+                headers: {
+                  Authorization: `Bearer ${newToken}`,
+                },
+              });
+              setUserData(res2.data);
+            } catch (e2) {
+              setError("No se pudo obtener el perfil tras renovar token.");
+            }
+          } else {
+            setError("Sesión expirada. Por favor inicia sesión.");
+          }
+        } else {
+          setError("Error al obtener el perfil.");
+        }
       }
     };
 
     fetchPerfil();
-  }, [ready]);
+  }, []);
 
   return { userData, error };
 };

@@ -1,7 +1,7 @@
 import parseJwt from "./parseJwt";
 
 const isTokenValid = () => {
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem("accessToken");
   if (!token) return false;
 
   const decoded = parseJwt(token);

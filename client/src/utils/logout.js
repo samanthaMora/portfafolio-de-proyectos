@@ -2,18 +2,14 @@ import axios from "axios";
 
 const logout = async () => {
   try {
-    await axios.post("http://localhost:3000/logout", {}, {
-      withCredentials: true,
-    });
+    await axios.post("http://localhost:3000/logout");
   } catch (err) {
     console.error("Error al cerrar sesión:", err);
   }
 
-  localStorage.removeItem("token");
-  window.location.href = "/";
+  localStorage.removeItem("accessToken");
+  localStorage.removeItem("refreshToken");
+  window.location.href = "/login";
 };
 
 export default logout;
-
-
-  

@@ -19,14 +19,13 @@ const useSearchProyectos = () => {
     const fetchProyectos = async () => {
       if (searchQuery.length > 0) {
         try {
-          const token = localStorage.getItem("token");
+          const token = localStorage.getItem("accessToken"); // <- cambio aquí
           const res = await axios.get(
             `http://localhost:3000/searchProyects?query=${searchQuery}&page=${page}&limit=5`,
             {
               headers: {
                 Authorization: `Bearer ${token}`,
               },
-              withCredentials: true,
             }
           );
 
@@ -48,10 +47,11 @@ const useSearchProyectos = () => {
     resultados,
     page,
     totalPages,
-    setPage, // para cambiar de página desde fuera
+    setPage,
   };
 };
 
 export default useSearchProyectos;
+
 
 

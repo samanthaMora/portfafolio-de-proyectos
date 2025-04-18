@@ -1,29 +1,48 @@
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import Swal from "sweetalert2"; // 👈 Agregado para poder usar Swal.close()
+import { showSuccess, showError, showLoading } from "../../utils/alerts";
 
 const useRegister = () => {
-    const navigate = useNavigate();
-  
-    const register = async (email, pass, user) => {
-      const data = { email, pass, user };
-  
-      try {
-        const res = await axios.post("http://localhost:3000/register", data, {
-          withCredentials: true,
-        });
-        alert("Usuario registrado exitosamente");
-        navigate("/");
-      } catch (err) {
-        if (err.response?.status === 409) {
-          alert("El correo ya está registrado.");
-        } else {
-          console.error(err);
-          alert("Registro fallido. Intenta más tarde.");
-        }
+  const navigate = useNavigate();
+
+  const register = async (email, pass, user) => {
+    const data = { email, pass, user };
+
+    try {
+      // Mostrar loading mientras se hace el registro
+      showLoading({
+        title: "Registrando...",
+        text: "Estamos creando tu cuenta, por favor espera.",
+      });
+      
+
+      await axios.post("http://localhost:3000/register", data);
+
+      // Cerrar el loading manualmente
+      Swal.close();
+
+      // Mostrar éxito
+      await showSuccess({
+        title: "Registro exitoso",
+        text: "Te hemos enviado un correo para verificar tu cuenta. Revisa tu bandeja de entrada.",
+      });
+
+      navigate("/verify");
+
+    } catch (err) {
+      Swal.close(); // Cerrar también si hay error
+
+      if (err.response?.status === 409) {
+        showError({ text: "El correo ya está registrado." });
+      } else {
+        console.error(err);
+        showError({ text: "Registro fallido. Intenta más tarde." });
       }
-    };
-  
-    return { register };
+    }
   };
-  
-  export default useRegister;
+
+  return { register };
+};
+
+export default useRegister;

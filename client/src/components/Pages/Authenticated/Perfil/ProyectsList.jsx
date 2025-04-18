@@ -1,14 +1,27 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import useDeleteProyect from "../../../../hooks/Perfil/useDeleteProyect.js";
-import "../../../../styles/OverlayMessage.css";
+import { showConfirm } from "../../../../utils/alerts.js";
+import { usePerfilContext } from "./PerfilContext.jsx";
 
-function ProyectsList({ arrProyects, setArrProyects, setProyectoEnEdicion }) {
+function ProyectsList() {
+  const {
+    arrProyects,
+    setArrProyects,
+    setProyectoEnEdicion
+  } = usePerfilContext();
+
   const { eliminar } = useDeleteProyect();
+  const navigate = useNavigate();
 
   const handleDelete = async (id) => {
-    const confirm = window.confirm(
-      "¿Estás seguro de que quieres eliminar este proyecto?"
-    );
+    const confirm = await showConfirm({
+      title: "¿Eliminar proyecto?",
+      text: "Esta acción no se puede deshacer.",
+      confirmButtonText: "Eliminar",
+      cancelButtonText: "Cancelar",
+    });
+
     if (!confirm) return;
 
     const success = await eliminar(id);
@@ -18,10 +31,15 @@ function ProyectsList({ arrProyects, setArrProyects, setProyectoEnEdicion }) {
     }
   };
 
+  const handleEdit = (proyecto) => {
+    setProyectoEnEdicion(proyecto);
+    navigate("/home/proyecto");
+  };
+
   return (
     <div className="container mt-5">
-        <h3 className="mb-4 view-text">Mis Proyectos</h3>
-      <table className="table table-striped glass-card">
+      <h3 className="mb-4">Mis Proyectos</h3>
+      <table className="table table-striped">
         <thead>
           <tr className="table-success">
             <th>#</th>
@@ -46,7 +64,7 @@ function ProyectsList({ arrProyects, setArrProyects, setProyectoEnEdicion }) {
                 <td>
                   <button
                     className="btn btn-warning btn-sm"
-                    onClick={() => setProyectoEnEdicion(proyecto)}
+                    onClick={() => handleEdit(proyecto)}
                   >
                     Editar
                   </button>
@@ -67,3 +85,4 @@ function ProyectsList({ arrProyects, setArrProyects, setProyectoEnEdicion }) {
 }
 
 export default ProyectsList;
+

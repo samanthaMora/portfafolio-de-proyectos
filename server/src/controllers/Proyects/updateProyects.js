@@ -2,11 +2,13 @@ import pool from "../../models/db.js";
 import getUserFromToken from "../helpers/getUserFromToken.js";
 
 const updateProyects = async (req, res) => {
-  const { id, titulo, descripcion } = req.body;
+  let { id, titulo, descripcion } = req.body;
+
+  id = Number(id); // asegura que sea número
 
   if (
     !id ||
-    typeof id !== "number" ||
+    isNaN(id) ||
     !titulo?.trim() ||
     !descripcion?.trim()
   ) {

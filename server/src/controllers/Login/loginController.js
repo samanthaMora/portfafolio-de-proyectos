@@ -1,10 +1,11 @@
 import pool from "../../models/db.js";
 import jwt from "jsonwebtoken";
-import bcrypt from "bcrypt"
+import bcrypt from "bcrypt";
 
 const login = async (req, res) => {
   const { email, pass } = req.body;
   const consult = "SELECT * FROM login WHERE email = $1";
+
   try {
     const result = await pool.query(consult, [email]);
 
@@ -13,6 +14,13 @@ const login = async (req, res) => {
     }
 
     const user = result.rows[0];
+
+    if (!user.verificado) {
+      return res.status(403).json({
+        message: "Debes verificar tu correo antes de iniciar sesión",
+      });
+    }
+
     const isMatch = await bcrypt.compare(pass, user.password);
 
     if (!isMatch) {
@@ -20,27 +28,17 @@ const login = async (req, res) => {
     }
 
     const payload = {
-      email: result.rows[0].email,
+      id: user.id,
+      email: user.email,
     };
 
-    const token = jwt.sign(payload, "Stack", {
-      expiresIn: "15",
-    });
-
-    const refreshToken = jwt.sign(payload, "StackRefresh", {
-      expiresIn: "1d",
-    });
-
-    res.cookie("refreshToken", refreshToken, {
-      httpOnly: true,
-      secure: false,
-      sameSite: "Lax",
-      maxAge: 5 * 60 * 1000,
-    });
+    const accessToken = jwt.sign(payload, "Stack", { expiresIn: "15m" });
+    const refreshToken = jwt.sign(payload, "StackRefresh", { expiresIn: "1d" });
 
     return res.status(200).json({
       message: "Login exitoso",
-      token,
+      accessToken,
+      refreshToken,
     });
   } catch (e) {
     console.error("Error en login:", e);

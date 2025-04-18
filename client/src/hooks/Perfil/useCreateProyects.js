@@ -1,23 +1,25 @@
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import renewToken from "../../utils/renewToken";
+import { showSuccess, showError } from "../../utils/alerts";
 
 const useCreateProyects = () => {
   const navigate = useNavigate();
 
   const create = async (titulo, descripcion) => {
     const data = { titulo, descripcion };
-    let token = localStorage.getItem("token");
+    let token = localStorage.getItem("accessToken");
 
     try {
       await axios.post("http://localhost:3000/createProyects", data, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-        withCredentials: true,
       });
-      alert("Proyecto creado");
+
+      await showSuccess({ text: "Proyecto creado correctamente" });
       return true;
+
     } catch (err) {
       if (err.response?.status === 403) {
         const newToken = await renewToken();
@@ -27,19 +29,20 @@ const useCreateProyects = () => {
               headers: {
                 Authorization: `Bearer ${newToken}`,
               },
-              withCredentials: true,
             });
-            alert("Proyecto creado tras renovar token");
+
+            await showSuccess({ text: "Proyecto creado tras renovar token" });
             return true;
+
           } catch (e2) {
-            alert("Error al crear proyecto tras renovar token");
+            showError({ text: "Error al crear proyecto tras renovar token" });
           }
         } else {
-          alert("Sesión expirada. Por favor inicia sesión nuevamente.");
-          navigate("/");
+          showError({ text: "Sesión expirada. Por favor inicia sesión nuevamente." });
+          navigate("/login");
         }
       } else {
-        alert("Error al crear proyecto");
+        showError({ text: "Error al crear proyecto" });
       }
     }
     return false;

@@ -1,34 +1,27 @@
-import pool from "../../models/db.js";
-import bcrypt from "bcrypt";
+// src/controllers/Login/registerController.js
+import { handleRegisterWithVerification } from "../helpers/emailVerification.js";
+import axios from "axios";
 
 const register = async (req, res) => {
-  const { email, pass, user } = req.body;
   try {
-    const exist = await pool.query("SELECT * FROM login WHERE email = $1", [
-      email,
-    ]);
-    if (exist.rows.length > 0) {
-      return res.status(409).json({ message: "el usuario ya existe" });
+    const result = await handleRegisterWithVerification(req.body);
+
+    if (result.status !== 201) {
+      return res.status(result.status).json({ message: result.message });
     }
 
-    if (!email || !pass || !user) {
-      return res
-        .status(400)
-        .json({ message: "Todos los campos son obligatorios" });
-    }
+    await axios.post("http://localhost:3000/user-setup", {
+      userId: result.userId,
+      username: result.username,
+    });
 
-    const hashedPasword = await bcrypt.hash(pass, 10);
-
-    await pool.query(
-      "INSERT INTO login (email, password, username) VALUES ($1, $2, $3)",
-      [email, hashedPasword, user]
-    );
-
-    res.status(201).json({ message: "el usuario registrado" });
+    return res.status(201).json({ message: result.message });
   } catch (e) {
     console.error("Error en registro:", e);
-    return res.status(500).json({ message: "Error en el servidor" });
+    res.status(500).json({ message: "Error en el servidor" });
   }
 };
 
 export default register;
+
+

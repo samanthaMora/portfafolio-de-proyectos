@@ -1,23 +1,25 @@
 import axios from "axios";
 import renewToken from "../../utils/renewToken";
 import { useNavigate } from "react-router-dom";
+import { showSuccess, showError } from "../../utils/alerts";
 
 const useUpdateProyect = () => {
   const navigate = useNavigate();
 
   const update = async (id, titulo, descripcion) => {
     const data = { id, titulo, descripcion };
-    let token = localStorage.getItem("token");
+    let token = localStorage.getItem("accessToken");
 
     try {
       await axios.put("http://localhost:3000/updateProyects", data, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-        withCredentials: true,
       });
-      alert("Proyecto actualizado");
+
+      await showSuccess({ text: "Proyecto actualizado correctamente" });
       return true;
+
     } catch (err) {
       if (err.response?.status === 403) {
         const newToken = await renewToken();
@@ -27,21 +29,23 @@ const useUpdateProyect = () => {
               headers: {
                 Authorization: `Bearer ${newToken}`,
               },
-              withCredentials: true,
             });
-            alert("Proyecto actualizado tras renovar token");
+
+            await showSuccess({ text: "Proyecto actualizado tras renovar token" });
             return true;
+
           } catch (e2) {
-            alert("Error al actualizar tras renovar token");
+            showError({ text: "Error al actualizar tras renovar token" });
           }
         } else {
-          alert("Sesión expirada. Por favor inicia sesión nuevamente.");
-          navigate("/");
+          showError({ text: "Sesión expirada. Por favor inicia sesión nuevamente." });
+          navigate("/login");
         }
       } else {
-        alert("Error al actualizar proyecto");
+        showError({ text: "Error al actualizar proyecto" });
       }
     }
+
     return false;
   };
 
@@ -49,4 +53,3 @@ const useUpdateProyect = () => {
 };
 
 export default useUpdateProyect;
-

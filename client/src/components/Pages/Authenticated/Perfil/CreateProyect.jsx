@@ -1,16 +1,20 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import useCreateProyects from "../../../../hooks/Perfil/useCreateProyects";
 import useUpdateProyect from "../../../../hooks/Perfil/useUpdateProyect";
 import useMyProyectList from "../../../../hooks/Perfil/useMyProyectsList";
-import "../../../../styles/OverlayMessage.css";
+import { usePerfilContext } from "./PerfilContext";
 
-function CreateProyect({
-  setArrProyects,
-  proyectoEnEdicion,
-  setProyectoEnEdicion,
-}) {
+function CreateProyect() {
   const [titulo, setTitulo] = useState("");
   const [descripcion, setDescripcion] = useState("");
+
+  const navigate = useNavigate();
+  const {
+    proyectoEnEdicion,
+    setProyectoEnEdicion,
+    setArrProyects,
+  } = usePerfilContext();
   const { create } = useCreateProyects();
   const { update } = useUpdateProyect();
   const { getProyectos } = useMyProyectList();
@@ -36,39 +40,42 @@ function CreateProyect({
     if (success) {
       const nuevosProyectos = await getProyectos();
       setArrProyects([...nuevosProyectos]);
+
       setTitulo("");
       setDescripcion("");
       setProyectoEnEdicion(null);
+
+      navigate("/home/perfil");
     }
   };
 
   return (
     <div className="container p-0 mt-4">
-        <h3 className="mb-4 view-text">
-          {proyectoEnEdicion ? "Editar Proyecto" : "Crear Proyecto"}
-        </h3>
+      <h3 className="mb-4">
+        {proyectoEnEdicion ? "Editar Proyecto" : "Crear Proyecto"}
+      </h3>
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
-            <label className="form-label view-text">Título del Proyecto</label>
+          <label className="form-label">Título del Proyecto</label>
           <input
             type="text"
-            className="form-control glass-card"
+            className="form-control"
             value={titulo}
             onChange={(e) => setTitulo(e.target.value)}
           />
         </div>
 
         <div className="mb-3">
-            <label className="form-label view-text">Descripción</label>
+          <label className="form-label">Descripción</label>
           <textarea
-            className="form-control glass-card"
+            className="form-control"
             rows="4"
             value={descripcion}
             onChange={(e) => setDescripcion(e.target.value)}
           ></textarea>
         </div>
 
-        <button type="submit" className="btn btn-primary view-button">
+        <button type="submit" className="btn btn-primary">
           {proyectoEnEdicion ? "Actualizar" : "Crear"}
         </button>
 
@@ -80,6 +87,7 @@ function CreateProyect({
               setProyectoEnEdicion(null);
               setTitulo("");
               setDescripcion("");
+              navigate("/home/perfil");
             }}
           >
             Cancelar
@@ -91,3 +99,4 @@ function CreateProyect({
 }
 
 export default CreateProyect;
+

@@ -3,6 +3,7 @@ import verifyToken from '../middleware/verifyToken.js'
 import loginRouter from './Login/loginEndPoints.js';
 import perfilRouter from './Profile/profileEndPoints.js';
 import searchRouter from './Search/searchEndPoints.js';
+import userRouter from './User/userEndPonits.js';
 import pruebasRouter from './Test/test.js';
 
 const router = Router();
@@ -10,6 +11,8 @@ const router = Router();
 router.use('/', pruebasRouter)
 
 router.use('/', loginRouter)
+
+router.use('/', userRouter)
 
 router.use('/', verifyToken , perfilRouter)
 

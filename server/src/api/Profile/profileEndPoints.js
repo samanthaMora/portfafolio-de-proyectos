@@ -8,7 +8,7 @@ import sanitizeInput from "../../middleware/sanitizeInput.js";
 
 const perfilRouter = Router();
 
-perfilRouter.post("/perfil", perfil);
+perfilRouter.get("/perfil", perfil);
 
 perfilRouter.post(
   "/createProyects",

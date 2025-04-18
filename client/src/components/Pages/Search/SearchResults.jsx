@@ -1,8 +1,6 @@
 import useSearchProyectos from "../../../hooks/Search/useSearchProyectos";
 import SearchResultItem from "./SearchResultItem";
 import { useSearch } from "../../../hooks/Search/useSearchContext";
-import "../../../styles/pagination-buttons.css";
-import "../../../styles/OverlayMessage.css";
 
 const SearchResults = () => {
   const { resultados, page, totalPages, setPage } = useSearchProyectos();
@@ -19,9 +17,7 @@ const SearchResults = () => {
       pages.push(
         <button
           key={i}
-          className={`pagination-button mx-1 ${
-            i === page ? "pagination-active" : ""
-          }`}
+          className={`btn btn-sm mx-1 ${i === page ? "btn-primary" : "btn-outline-secondary"}`}
           onClick={() => handlePageClick(i)}
         >
           {i}
@@ -36,16 +32,16 @@ const SearchResults = () => {
     <div className="container mt-4">
       {searchQuery.length > 0 && (
         <div>
-          <h5 className="view-text">
+          <h5>
             Resultados para: <em>"{searchQuery}"</em>
           </h5>
 
           {resultados.length === 0 ? (
-            <p className="view-text">No se encontraron proyectos.</p>
+            <p>No se encontraron proyectos.</p>
           ) : (
             <>
               <div className="table-responsive">
-                <table className="table table-bordered table-striped table-hover align-middle glass-card">
+                <table className="table table-bordered table-striped align-middle">
                   <thead className="table-dark">
                     <tr>
                       <th>Título</th>
@@ -61,10 +57,9 @@ const SearchResults = () => {
                 </table>
               </div>
 
-              {/* Paginador numérico */}
               <div className="d-flex justify-content-center mt-4 flex-wrap">
                 <button
-                  className="pagination-button mx-1"
+                  className="btn btn-outline-secondary btn-sm mx-1"
                   onClick={() => setPage(page - 1)}
                   disabled={page === 1}
                 >
@@ -74,7 +69,7 @@ const SearchResults = () => {
                 {renderPageNumbers()}
 
                 <button
-                  className="pagination-button mx-1"
+                  className="btn btn-outline-secondary btn-sm mx-1"
                   onClick={() => setPage(page + 1)}
                   disabled={page === totalPages}
                 >

@@ -2,6 +2,8 @@ import express from "express";
 import cors from "cors";
 import router from "./api/endPoints.js";
 import cookieParser from "cookie-parser";
+import path from "path";
+
 const app = express();
 const port = 3000;
 
@@ -11,6 +13,11 @@ app.use(
     credentials: true,
   })
 );
+
+app.use(express.urlencoded({ extended: true }));
+
+app.use("/uploads", express.static(path.resolve("uploads")));
+
 app.use(cookieParser());
 
 app.use(express.json());

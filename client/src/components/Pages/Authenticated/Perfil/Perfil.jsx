@@ -1,37 +1,69 @@
-import { useState, useEffect } from "react";
-import usePerfil from "../../../../hooks/Perfil/usePerfil.js";
+import { useNavigate } from "react-router-dom";
+import useAvatar from "../../../../hooks/Perfil/useAvatar.js";
+import useUploadAvatar from "../../../../hooks/Perfil/useUploadAvatar.js";
+import { showConfirm } from "../../../../utils/alerts.js";
+import { usePerfilContext } from "../Perfil/PerfilContext.jsx";
 import ProyectsList from "./ProyectsList.jsx";
-import CreateProyect from "./CreateProyect.jsx";
-import useMyProyectList from "../../../../hooks/Perfil/useMyProyectsList.js";
-import NavButtonGroup from "../../shared/NavButtons/NavButtonGroup";
-import FondoNet from "../../shared/Backgrounds/FondoNet.jsx"
-import "../../../../styles/OverlayMessage.css"
+import NavButtonGroup from "../../shared/NavButtons/NavButtonGroup.jsx";
 
 const Perfil = () => {
-  const [arrProyects, setArrProyects] = useState([]);
-  const [proyectoEnEdicion, setProyectoEnEdicion] = useState(null);
-  const { userData, error } = usePerfil();
-  const { getProyectos } = useMyProyectList();
+  const {
+    userData,
+    error,
+    arrProyects,
+    setArrProyects,
+    setProyectoEnEdicion
+  } = usePerfilContext();
 
-  useEffect(() => {
-    const fetchProyectos = async () => {
-      const proyectos = await getProyectos();
-      setArrProyects(proyectos);
+  const avatarUrl = useAvatar();
+  const { uploadAvatar } = useUploadAvatar();
+  const navigate = useNavigate();
+
+  const handleAvatarClick = async () => {
+    const confirmed = await showConfirm("¿Deseas cambiar tu imagen de perfil?");
+    if (!confirmed) return;
+
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = "image/*";
+
+    input.onchange = async (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        const success = await uploadAvatar(file);
+        if (success) {
+          window.location.reload(); 
+        }
+      }
     };
 
-    fetchProyectos();
-  }, []);
+    input.click();
+  };
+
+  const handleCrearNuevo = () => {
+    setProyectoEnEdicion(null);
+    navigate("/home/proyecto");
+  };
 
   if (error) return <p>{error}</p>;
   if (!userData) return <p>Cargando perfil...</p>;
 
   return (
-    <>
-    <FondoNet/>
-      <div className="container mt-5">
-        <h3 className="view-text">Perfil</h3>
+    <div className="container mt-5">
+      <h3 className="mb-4">Perfil</h3>
 
-        <ul className="list-group" style={{ maxWidth: "400px" }}>
+      <div className="d-flex align-items-center mb-4 gap-4">
+        {avatarUrl && (
+          <img
+            src={avatarUrl}
+            alt="Avatar"
+            className="rounded-circle shadow"
+            style={{ width: "100px", height: "100px", objectFit: "cover", cursor: "pointer" }}
+            onClick={handleAvatarClick}
+          />
+        )}
+
+        <ul className="list-group" style={{ maxWidth: "400px", width: "100%" }}>
           <li className="list-group-item">
             <strong>Email:</strong> {userData.email}
           </li>
@@ -39,23 +71,20 @@ const Perfil = () => {
             <strong>Username:</strong> {userData.username}
           </li>
         </ul>
-        <br />
-        <CreateProyect
-          setArrProyects={setArrProyects}
-          proyectoEnEdicion={proyectoEnEdicion}
-          setProyectoEnEdicion={setProyectoEnEdicion}
-        />
-        <br />
-        <ProyectsList
-          arrProyects={arrProyects}
-          setArrProyects={setArrProyects}
-          setProyectoEnEdicion={setProyectoEnEdicion}
-        />
-        <br />
-        <NavButtonGroup />
       </div>
-    </>
+
+      <button className="btn btn-success mb-3" onClick={handleCrearNuevo}>
+        + Crear nuevo proyecto
+      </button>
+
+      <ProyectsList />
+
+      <br />
+      <NavButtonGroup />
+    </div>
   );
 };
 
 export default Perfil;
+
+

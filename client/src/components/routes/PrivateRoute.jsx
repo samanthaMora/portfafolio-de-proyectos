@@ -24,7 +24,7 @@ const PrivateRoute = ({ children }) => {
   }, []);
 
   if (authorized === null) return <p>Cargando...</p>;
-  if (!authorized) return <Navigate to="/" />;
+  if (!authorized) return <Navigate to="/login" />;
   return children;
 };
 
