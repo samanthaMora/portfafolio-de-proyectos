@@ -1,44 +1,42 @@
+// src/components/Perfil/ProyectsList.jsx
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import useDeleteProyect from "../../../../hooks/Perfil/useDeleteProyect.js";
 import { showConfirm } from "../../../../utils/alerts.js";
+import { useDeleteProyect } from "../../../../hooks/Perfil/Test/useDeleteProyect.js";
 import { usePerfilContext } from "./PerfilContext.jsx";
 
-function ProyectsList() {
+export default function ProyectsList() {
   const {
     arrProyects,
     setArrProyects,
     setProyectoEnEdicion
   } = usePerfilContext();
-
-  const { eliminar } = useDeleteProyect();
   const navigate = useNavigate();
+  const { eliminar } = useDeleteProyect();
 
-  const handleDelete = async (id) => {
-    const confirm = await showConfirm({
+  const handleEdit = proyecto => {
+    setProyectoEnEdicion(proyecto);
+    navigate("/home/proyecto");
+  };
+
+  const handleDelete = async id => {
+    const confirmed = await showConfirm({
       title: "¿Eliminar proyecto?",
       text: "Esta acción no se puede deshacer.",
       confirmButtonText: "Eliminar",
       cancelButtonText: "Cancelar",
     });
+    if (!confirmed) return;
 
-    if (!confirm) return;
-
-    const success = await eliminar(id);
-    if (success) {
-      const nuevaLista = arrProyects.filter((p) => p.id !== id);
-      setArrProyects(nuevaLista);
+    const ok = await eliminar(id);
+    if (ok) {
+      setArrProyects(arrProyects.filter(p => p.id !== id));
     }
   };
 
-  const handleEdit = (proyecto) => {
-    setProyectoEnEdicion(proyecto);
-    navigate("/home/proyecto");
-  };
-
   return (
-    <div className="container mt-5">
-      <h3 className="mb-4">Mis Proyectos</h3>
+    <div className="container mt-4">
+      <h3>Mis Proyectos</h3>
       <table className="table table-striped">
         <thead>
           <tr className="table-success">
@@ -51,26 +49,24 @@ function ProyectsList() {
         <tbody>
           {arrProyects.length === 0 ? (
             <tr>
-              <td colSpan="4" className="text-center">
-                No hay proyectos
-              </td>
+              <td colSpan="4" className="text-center">No hay proyectos</td>
             </tr>
           ) : (
-            arrProyects.map((proyecto, index) => (
-              <tr key={proyecto.id}>
-                <th scope="row">{index + 1}</th>
-                <td>{proyecto.titulo}</td>
-                <td>{proyecto.descripcion}</td>
+            arrProyects.map((proy, i) => (
+              <tr key={proy.id}>
+                <th scope="row">{i + 1}</th>
+                <td>{proy.titulo}</td>
+                <td>{proy.descripcion}</td>
                 <td>
                   <button
-                    className="btn btn-warning btn-sm"
-                    onClick={() => handleEdit(proyecto)}
+                    className="btn btn-sm btn-warning me-2"
+                    onClick={() => handleEdit(proy)}
                   >
                     Editar
                   </button>
                   <button
-                    className="btn btn-danger btn-sm ms-2"
-                    onClick={() => handleDelete(proyecto.id)}
+                    className="btn btn-sm btn-danger"
+                    onClick={() => handleDelete(proy.id)}
                   >
                     Eliminar
                   </button>
@@ -83,6 +79,4 @@ function ProyectsList() {
     </div>
   );
 }
-
-export default ProyectsList;
 

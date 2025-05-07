@@ -1,35 +1,37 @@
+// src/hooks/Perfil/useMyProyectList.js
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 import renewToken from "../../utils/renewToken";
 import { showError } from "../../utils/alerts";
+import { useNavigate } from "react-router-dom";
 
-const useMyProyectList = () => {
+const API_BASE = "http://localhost:3000";
+
+export default function useMyProyectList() {
   const navigate = useNavigate();
 
   const getProyectos = async () => {
-    let token = localStorage.getItem("accessToken");
-
+    const token = localStorage.getItem("accessToken");
     try {
-      const res = await axios.get("http://localhost:3000/viewMyProyects", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      return res.data.proyectos;
+      const res = await axios.get(
+        `${API_BASE}/proyectos/mis-proyectos`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      // asumimos que el controller responde con un array de proyectos
+      return res.data;
     } catch (err) {
       if (err.response?.status === 403) {
+        // token expirado: renovar y reintentar
         const newToken = await renewToken();
         if (newToken) {
           try {
-            const res2 = await axios.get("http://localhost:3000/viewMyProyects", {
-              headers: {
-                Authorization: `Bearer ${newToken}`,
-              },
-            });
-            return res2.data.proyectos;
+            const res2 = await axios.get(
+              `${API_BASE}/proyectos/mis-proyectos`,
+              { headers: { Authorization: `Bearer ${newToken}` } }
+            );
+            return res2.data;
           } catch (e2) {
-            console.error("Error al reintentar con token renovado", e2);
-            showError({ text: "Error al obtener proyectos tras renovar token" });
+            console.error("Error tras renovar token:", e2);
+            showError({ text: "Error obteniendo proyectos tras renovar sesión." });
           }
         } else {
           showError({ text: "Sesión expirada. Por favor inicia sesión nuevamente." });
@@ -39,12 +41,9 @@ const useMyProyectList = () => {
         console.error(err);
         showError({ text: "Error al obtener proyectos" });
       }
-
       return [];
     }
   };
 
   return { getProyectos };
-};
-
-export default useMyProyectList;
+}

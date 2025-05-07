@@ -1,5 +1,5 @@
 import React from "react";
-import CreateProyect from "./CreateProyect";
+import CreateProyect from "./CreateProyect/CreateProyect";
 import { useNavigate } from "react-router-dom";
 import { usePerfilContext } from "./PerfilContext";
 
@@ -19,7 +19,7 @@ const ProyectoFormPage = () => {
       </h3>
 
       <button className="btn btn-secondary mb-3" onClick={handleVolver}>
-        ⬅ Volver a perfil
+        Volver a perfil
       </button>
 
       <CreateProyect />

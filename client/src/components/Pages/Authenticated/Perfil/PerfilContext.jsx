@@ -1,4 +1,5 @@
-import { createContext, useContext, useState, useEffect } from "react";
+// src/components/Perfil/PerfilContext.jsx
+import { createContext, useContext, useState, useEffect, useCallback } from "react";
 import usePerfil from "../../../../hooks/Perfil/usePerfil.js";
 import useMyProyectList from "../../../../hooks/Perfil/useMyProyectsList.js";
 
@@ -12,12 +13,23 @@ export const PerfilProvider = ({ children }) => {
   const [proyectoEnEdicion, setProyectoEnEdicion] = useState(null);
 
   useEffect(() => {
-    const fetchProyectos = async () => {
-      const proyectos = await getProyectos();
-      setArrProyects(proyectos);
-    };
-    fetchProyectos();
+    (async () => {
+      const lista = await getProyectos();
+      setArrProyects(lista);
+    })();
+  }, [getProyectos]);
+
+  // Estabiliza setProyectoEnEdicion con useCallback
+  const seleccionarProyecto = useCallback((proyecto) => {
+    setProyectoEnEdicion((prev) => {
+      if (!proyecto) return null; // <- previene errores si proyecto es null
+      if (!prev || prev.id !== proyecto.id) {
+        return proyecto;
+      }
+      return prev;
+    });
   }, []);
+  
 
   return (
     <PerfilContext.Provider
@@ -27,7 +39,7 @@ export const PerfilProvider = ({ children }) => {
         arrProyects,
         setArrProyects,
         proyectoEnEdicion,
-        setProyectoEnEdicion,
+        setProyectoEnEdicion: seleccionarProyecto, // 👈 estable
       }}
     >
       {children}
@@ -36,3 +48,4 @@ export const PerfilProvider = ({ children }) => {
 };
 
 export const usePerfilContext = () => useContext(PerfilContext);
+

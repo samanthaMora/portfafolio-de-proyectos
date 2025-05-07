@@ -5,8 +5,15 @@ import perfilRouter from './Profile/profileEndPoints.js';
 import searchRouter from './Search/searchEndPoints.js';
 import userRouter from './User/userEndPonits.js';
 import pruebasRouter from './Test/test.js';
+import categoriesRouter from './Proyectos/categoryRoutes.js';
+import tagsRouter from './Proyectos/tagRoutes.js';
+import tecRouter from './Proyectos/technologyRoutes.js'
+import projectsRouter from './Proyectos/projectRoutes.js';
+
+
 
 const router = Router();
+
 
 router.use('/', pruebasRouter)
 
@@ -14,8 +21,18 @@ router.use('/', loginRouter)
 
 router.use('/', userRouter)
 
+router.use('/categorias', categoriesRouter)
+
+router.use('/etiquetas', tagsRouter);
+
+router.use('/tecnologias', tecRouter);
+
+router.use('/proyectos', verifyToken, projectsRouter);
+
 router.use('/', verifyToken , perfilRouter)
 
 router.use('/', verifyToken , searchRouter)
+
+
 
 export default router;
