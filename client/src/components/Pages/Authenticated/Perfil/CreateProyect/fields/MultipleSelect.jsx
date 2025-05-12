@@ -1,40 +1,40 @@
-import { useState } from "react";
+// src/components/Perfil/fields/MultipleSelect.jsx
+import React from "react";
 
 export default function MultipleSelect({ label, arr, setArr }) {
-  const [sel, setSel] = useState([]);
-
-  const removeSelected = () => {
-    setArr(arr.filter((item) => !sel.includes(item.id)));
-    setSel([]);
+  const handleRemove = (item) => {
+    setArr(arr.filter((i) => {
+      if (typeof i === "object") return i.id !== item.id;
+      return i !== item;
+    }));
   };
 
   return (
-    <div className="col-md-4">
+    <div className="mb-3">
       <label className="form-label">{label}</label>
-      <select
-        multiple
-        className="form-select"
-        size={6}
-        value={sel}
-        onChange={(e) => {
-          const selected = [...e.target.selectedOptions].map((o) => +o.value);
-          setSel(selected);
-        }}
-      >
-        {arr.map((it) => (
-          <option key={it.id} value={it.id}>
-            {it.nombre}
-          </option>
-        ))}
-      </select>
-      <button
-        type="button"
-        className="btn btn-sm btn-outline-danger mt-2"
-        disabled={!sel.length}
-        onClick={removeSelected}
-      >
-        Eliminar seleccionados
-      </button>
+      <div className="d-flex flex-wrap gap-2">
+        {arr.length === 0 && (
+          <small className="text-muted">No hay {label.toLowerCase()} aún</small>
+        )}
+        {arr.map((item, idx) => {
+          const name = typeof item === "object" ? item.nombre : item;
+          const key = typeof item === "object" ? item.id : name + idx;
+          return (
+            <span
+              key={key}
+              className="badge bg-secondary d-flex align-items-center"
+            >
+              {name}
+              <button
+                type="button"
+                className="btn-close btn-close-white btn-sm ms-2"
+                aria-label={`Eliminar ${name}`}
+                onClick={() => handleRemove(item)}
+              />
+            </span>
+          );
+        })}
+      </div>
     </div>
   );
 }

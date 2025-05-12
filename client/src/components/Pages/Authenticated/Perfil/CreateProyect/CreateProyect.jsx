@@ -1,7 +1,9 @@
-import { useFormProyect } from "./useFormProyect";
-import ProyectForm from "./ProyectForm";
+// src/components/Pages/Authenticated/Perfil/CreateProyect/CreateProyect.jsx
+import React from "react";
+import { useFormProyect } from "./useFormProyect.js";
+import ProyectoForm from "./ProyectForm.jsx";
 
-export default function CreateProyect() {
-  const formProps = useFormProyect();
-  return <ProyectForm {...formProps} />;
+export default function CreateProyect({ id }) {
+  const formProps = useFormProyect(id);
+  return <ProyectoForm {...formProps} />;
 }

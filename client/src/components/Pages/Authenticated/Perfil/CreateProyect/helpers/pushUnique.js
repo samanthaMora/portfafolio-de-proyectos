@@ -1,6 +1,7 @@
-export function pushUnique(arr, setArr, v) {
-    const nombre = v.trim();
-    if (!nombre || arr.some((x) => x.nombre === nombre)) return;
-    setArr([...arr, { nombre }]);
-  }
-  
+// src/components/Pages/Authenticated/Perfil/CreateProyect/helpers/pushUnique.js
+export function pushUnique(arr, setArr, nuevoNombre) {
+  const nombre = String(nuevoNombre || "").trim();
+  if (!nombre) return;           // nada que añadir si viene vacío
+  if (arr.includes(nombre)) return; // evita duplicados
+  setArr([...arr, nombre]);      // añade solo el string
+}

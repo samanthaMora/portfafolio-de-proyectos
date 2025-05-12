@@ -9,6 +9,9 @@ import categoriesRouter from './Proyectos/categoryRoutes.js';
 import tagsRouter from './Proyectos/tagRoutes.js';
 import tecRouter from './Proyectos/technologyRoutes.js'
 import projectsRouter from './Proyectos/projectRoutes.js';
+import publicRouter from "./public/publicRouter.js";
+import comentariosRouter from "./public/comentariosRouter.js";
+
 
 
 
@@ -21,17 +24,22 @@ router.use('/', loginRouter)
 
 router.use('/', userRouter)
 
+router.use("/public", publicRouter);
+
 router.use('/categorias', categoriesRouter)
 
 router.use('/etiquetas', tagsRouter);
 
 router.use('/tecnologias', tecRouter);
 
+router.use("/", comentariosRouter);
+
 router.use('/proyectos', verifyToken, projectsRouter);
 
 router.use('/', verifyToken , perfilRouter)
 
 router.use('/', verifyToken , searchRouter)
+
 
 
 

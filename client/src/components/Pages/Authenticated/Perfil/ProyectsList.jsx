@@ -8,18 +8,17 @@ import { usePerfilContext } from "./PerfilContext.jsx";
 export default function ProyectsList() {
   const {
     arrProyects,
-    setArrProyects,
-    setProyectoEnEdicion
+    setArrProyects
   } = usePerfilContext();
   const navigate = useNavigate();
   const { eliminar } = useDeleteProyect();
 
-  const handleEdit = proyecto => {
-    setProyectoEnEdicion(proyecto);
-    navigate("/home/proyecto");
+  const handleEdit = (proyecto) => {
+    // Redirige al modo edición con ID en la URL
+    navigate(`/home/proyecto/editar/${proyecto.id}`);
   };
 
-  const handleDelete = async id => {
+  const handleDelete = async (id) => {
     const confirmed = await showConfirm({
       title: "¿Eliminar proyecto?",
       text: "Esta acción no se puede deshacer.",
@@ -34,9 +33,20 @@ export default function ProyectsList() {
     }
   };
 
+  const handleCreate = () => {
+    // Redirige a modo creación (sin ID)
+    navigate("/home/proyecto");
+  };
+
   return (
     <div className="container mt-4">
-      <h3>Mis Proyectos</h3>
+      <div className="d-flex justify-content-between align-items-center mb-3">
+        <h3>Mis Proyectos</h3>
+        <button className="btn btn-success" onClick={handleCreate}>
+          + Nuevo Proyecto
+        </button>
+      </div>
+
       <table className="table table-striped">
         <thead>
           <tr className="table-success">
@@ -79,4 +89,3 @@ export default function ProyectsList() {
     </div>
   );
 }
-

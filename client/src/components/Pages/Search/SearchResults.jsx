@@ -1,6 +1,7 @@
+// src/components/Pages/Search/SearchResults.jsx
 import useSearchProyectos from "../../../hooks/Search/useSearchProyectos";
-import SearchResultItem from "./SearchResultItem";
 import { useSearch } from "../../../hooks/Search/useSearchContext";
+import SearchResultItem from "./SearchResultItem";
 
 const SearchResults = () => {
   const { resultados, page, totalPages, setPage } = useSearchProyectos();
@@ -12,19 +13,19 @@ const SearchResults = () => {
 
   const renderPageNumbers = () => {
     const pages = [];
-
     for (let i = 1; i <= totalPages; i++) {
       pages.push(
         <button
           key={i}
-          className={`btn btn-sm mx-1 ${i === page ? "btn-primary" : "btn-outline-secondary"}`}
+          className={`btn btn-sm mx-1 ${
+            i === page ? "btn-primary" : "btn-outline-secondary"
+          }`}
           onClick={() => handlePageClick(i)}
         >
           {i}
         </button>
       );
     }
-
     return pages;
   };
 
@@ -51,7 +52,10 @@ const SearchResults = () => {
                   </thead>
                   <tbody>
                     {resultados.map((proyecto) => (
-                      <SearchResultItem key={proyecto.id} proyecto={proyecto} />
+                      <SearchResultItem
+                        key={proyecto.proyecto_id}
+                        proyecto={proyecto}
+                      />
                     ))}
                   </tbody>
                 </table>

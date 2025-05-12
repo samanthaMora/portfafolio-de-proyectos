@@ -13,11 +13,13 @@ import ResetPassword from "./components/Pages/Login/ForgotPassword/ResetPassword
 import RecoveryFailed from "./components/Pages/Login/ForgotPassword/RecoveryFailed.jsx";
 import RecoverySuccess from "./components/Pages/Login/ForgotPassword/RecoverySuccess.jsx";
 import VerifyPending from "./components/Pages/Login/TryVerify/VerifyPending.jsx";
+import Landing from "./components/Pages/Landing.jsx";
 
 import Home from "./components/Pages/Authenticated/Home/Home.jsx";
 import Perfil from "./components/Pages/Authenticated/Perfil/Perfil.jsx";
 import ProyectoFormPage from "./components/Pages/Authenticated/Perfil/ProyectoFormPage.jsx";
 import Search from "./components/Pages/Search/Search.jsx";
+import ProjectPublicView from "./components/Pages/Search/ProjectPublicView.jsx";
 
 // Rutas protegidas
 import PrivateRoute from "./components/routes/PrivateRoute";
@@ -30,19 +32,31 @@ ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <BrowserRouter>
       <Routes>
-        {/* Públicas */}
-        <Route path="*" element={<p>Not found</p>} />
+        {/* ------ PÁGINA INICIO ------ */}
+        <Route path="/" element={<Landing />} />
 
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/verify" element={<VerifyPending />} />
+        {/* ------ PÚBLICAS ------ */}
+        <Route path="/login"             element={<Login />} />
+        <Route path="/register"          element={<Register />} />
+        <Route path="/verify"            element={<VerifyPending />} />
         <Route path="/verify-email/:token" element={<VerifyEmail />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/recovery-success" element={<RecoverySuccess />} />
-        <Route path="/recovery-failed" element={<RecoveryFailed />} />
+        <Route path="/forgot-password"   element={<ForgotPassword />} />
+        <Route path="/recovery-success"  element={<RecoverySuccess />} />
+        <Route path="/recovery-failed"   element={<RecoveryFailed />} />
         <Route path="/reset-password/:token" element={<ResetPassword />} />
+        <Route path="/proyectos/:id"     element={<ProjectPublicView />} />
 
-        {/* Protegidas */}
+        {/* búsqueda pública con provider */}
+        <Route
+          path="/search"
+          element={
+            <SearchProvider>
+              <Search />
+            </SearchProvider>
+          }
+        />
+
+        {/* ------ PROTEGIDAS ------ */}
         <Route
           path="/home"
           element={
@@ -54,7 +68,6 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           }
         />
 
-        {/* Agrupamos perfil y proyecto bajo el mismo Provider */}
         <Route
           path="/home/perfil"
           element={
@@ -65,6 +78,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
             </PrivateRoute>
           }
         />
+
         <Route
           path="/home/proyecto"
           element={
@@ -76,15 +90,19 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           }
         />
 
-        {/* Ruta pública con búsqueda */}
         <Route
-          path="/search"
+          path="/home/proyecto/editar/:id"
           element={
-            <SearchProvider>
-              <Search />
-            </SearchProvider>
+            <PrivateRoute>
+              <PerfilProvider>
+                <ProyectoFormPage />
+              </PerfilProvider>
+            </PrivateRoute>
           }
         />
+
+        {/* ------ NOT FOUND (último) ------ */}
+        <Route path="*" element={<p>Not found</p>} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>

@@ -73,10 +73,6 @@ const Perfil = () => {
         </ul>
       </div>
 
-      <button className="btn btn-success mb-3" onClick={handleCrearNuevo}>
-        + Crear nuevo proyecto
-      </button>
-
       <ProyectsList />
 
       <br />
