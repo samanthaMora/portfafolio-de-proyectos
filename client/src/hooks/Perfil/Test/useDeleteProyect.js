@@ -4,7 +4,8 @@ import { useNavigate } from "react-router-dom";
 import renewToken from "../../../utils/renewToken.js";
 import { showError } from "../../../utils/alerts.js";
 
-const API = "http://localhost:3000";
+const API = import.meta.env.VITE_BACKEND_URL;
+
 
 export function useDeleteProyect() {
   const navigate = useNavigate();

@@ -2,6 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 
 const TestTecnologias = () => {
+  const API_BASE = import.meta.env.VITE_BACKEND_URL;
   const [nombre, setNombre] = useState("");
   const [resultado, setResultado] = useState("");
   const [loading, setLoading] = useState(false);
@@ -14,13 +15,13 @@ const TestTecnologias = () => {
     }
 
     const token = localStorage.getItem("accessToken");
-    console.log("🔐 Token usado:", token);
-    console.log("🧠 Tecnología enviada:", nombre);
+    console.log(" Token usado:", token);
+    console.log(" Tecnología enviada:", nombre);
 
     setLoading(true);
 
     try {
-      const res = await axios.post("http://localhost:3000/tecnologias",
+      const res = await axios.post(`${API_BASE}/tecnologias`,
         { nombre },
         {
           headers: {

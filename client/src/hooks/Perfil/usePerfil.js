@@ -3,6 +3,7 @@ import axios from "axios";
 import renewToken from "../../utils/renewToken";
 
 const usePerfil = () => {
+  const API_BASE = import.meta.env.VITE_BACKEND_URL;
   const [userData, setUserData] = useState(null);
   const [error, setError] = useState("");
 
@@ -11,7 +12,7 @@ const usePerfil = () => {
       let token = localStorage.getItem("accessToken");
 
       try {
-        const res = await axios.get("http://localhost:3000/perfil", {
+        const res = await axios.get(`${API_BASE}/perfil`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -22,7 +23,7 @@ const usePerfil = () => {
           const newToken = await renewToken();
           if (newToken) {
             try {
-              const res2 = await axios.get("http://localhost:3000/perfil", {
+              const res2 = await axios.get(`${API_BASE}/perfil`, {
                 headers: {
                   Authorization: `Bearer ${newToken}`,
                 },

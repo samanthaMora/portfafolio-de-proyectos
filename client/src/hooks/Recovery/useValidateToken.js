@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 
 const useValidateToken = () => {
+  const API_BASE = import.meta.env.VITE_BACKEND_URL;
   const { token } = useParams();
   const [status, setStatus] = useState("loading");
   const [email, setEmail] = useState(null);
@@ -10,7 +11,7 @@ const useValidateToken = () => {
   useEffect(() => {
     const validate = async () => {
       try {
-        const res = await axios.get(`http://localhost:3000/validate-recovery/${token}`);
+        const res = await axios.get(`${API_BASE}/validate-recovery/${token}`);
         if (res.data.valid) {
           setEmail(res.data.email);
           setStatus("valid");

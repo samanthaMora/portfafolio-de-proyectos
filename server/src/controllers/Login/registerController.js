@@ -1,6 +1,8 @@
 // src/controllers/Login/registerController.js
 import { handleRegisterWithVerification } from "../helpers/emailVerification.js";
 import axios from "axios";
+import dotenv from "dotenv";
+dotenv.config();
 
 const register = async (req, res) => {
   try {
@@ -10,7 +12,7 @@ const register = async (req, res) => {
       return res.status(result.status).json({ message: result.message });
     }
 
-    await axios.post("http://localhost:3000/user-setup", {
+    await axios.post(`${process.env.BACKEND_URL}/user-setup`, {
       userId: result.userId,
       username: result.username,
     });

@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-const API = "http://localhost:3000";
+const API = import.meta.env.VITE_BACKEND_URL;
+
 
 const TestMisProyectos = () => {
   const [proyectos, setProyectos] = useState([]);

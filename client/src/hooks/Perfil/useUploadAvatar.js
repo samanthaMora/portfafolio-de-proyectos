@@ -3,12 +3,13 @@ import renewToken from "../../utils/renewToken.js"; // ajusta la ruta según dó
 import { showSuccess, showError } from "../../utils/alerts.js";
 
 const useUploadAvatar = () => {
+  const API_BASE = import.meta.env.VITE_BACKEND_URL;
   const uploadAvatar = async (file) => {
     const attemptUpload = async (token) => {
       const formData = new FormData();
       formData.append("avatar", file);
 
-      return await axios.post("http://localhost:3000/upload-avatar", formData, {
+      return await axios.post(`${API_BASE}/upload-avatar`, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

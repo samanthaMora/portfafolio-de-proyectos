@@ -4,13 +4,14 @@ import { showLoading, showError } from "../../utils/alerts";
 import Swal from "sweetalert2";
 
 const useForgotPassword = () => {
+  const API_BASE = import.meta.env.VITE_BACKEND_URL;
   const navigate = useNavigate();
 
   const sendRecovery = async (email) => {
     try {
       showLoading({ title: "Enviando correo..." });
 
-      await axios.post("http://localhost:3000/RecoveryEmail", { email });
+      await axios.post(`${API_BASE}/RecoveryEmail`, { email });
 
       Swal.close();
       navigate("/recovery-success");

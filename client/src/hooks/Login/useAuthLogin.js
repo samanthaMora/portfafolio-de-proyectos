@@ -4,13 +4,14 @@ import parseJwt from "../../utils/parseJwt";
 import { showSuccess, showError } from "../../utils/alerts.js";
 
 const useAuthLogin = () => {
+  const API_BASE = import.meta.env.VITE_BACKEND_URL;
   const navigate = useNavigate();
 
   const login = async (email, pass) => {
     const data = { email, pass };
 
     try {
-      const res = await axios.post("http://localhost:3000/login", data);
+      const res = await axios.post(`${API_BASE}/login`, data);
 
       const { accessToken, refreshToken } = res.data;
 

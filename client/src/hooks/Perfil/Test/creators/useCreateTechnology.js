@@ -3,7 +3,7 @@ import axios from "axios";
 import renewToken from "../../../../utils/renewToken.js";
 import { showError } from "../../../../utils/alerts.js";
 
-const API_BASE = "http://localhost:3000";
+const API_BASE = import.meta.env.VITE_BACKEND_URL;
 
 export function useCreateTechnology() {
   const create = async (nombre) => {

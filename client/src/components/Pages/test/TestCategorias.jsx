@@ -3,6 +3,7 @@ import { useState } from "react";
 import axios from "axios";
 
 const TestCategorias = () => {
+  const API_BASE = import.meta.env.VITE_BACKEND_URL;
   const [nombre, setNombre] = useState("");
   const [resultado, setResultado] = useState("");
 
@@ -14,7 +15,7 @@ const TestCategorias = () => {
     console.log("Nombre enviado:", nombre);
   
     try {
-      const res = await axios.post("http://localhost:3000/categorias",
+      const res = await axios.post(`${API_BASE}/categorias`,
         { nombre },
         {
           headers: {

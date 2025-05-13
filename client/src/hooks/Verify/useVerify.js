@@ -4,6 +4,7 @@ import axios from "axios";
 import { showSuccess, showError } from "../../utils/alerts";
 
 const useVerify = () => {
+  const API_BASE = import.meta.env.VITE_BACKEND_URL;
   const [status, setStatus] = useState("loading");
   const { token } = useParams(); // ✅ aquí va el cambio
 
@@ -15,7 +16,7 @@ const useVerify = () => {
 
     const verify = async () => {
       try {
-        const res = await axios.get(`http://localhost:3000/verify/${token}`);
+        const res = await axios.get(`${API_BASE}/verify/${token}`);
         if (res.status === 200) {
           setStatus("success");
           showSuccess({ text: res.data.message || "Correo verificado correctamente" });

@@ -2,6 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 
 const TestTags = () => {
+  const API_BASE = import.meta.env.VITE_BACKEND_URL;
   const [nombre, setNombre] = useState("");
   const [resultado, setResultado] = useState("");
   const [loading, setLoading] = useState(false);
@@ -20,7 +21,7 @@ const TestTags = () => {
     setLoading(true);
 
     try {
-      const res = await axios.post("http://localhost:3000/etiquetas",
+      const res = await axios.post(`${API_BASE}/etiquetas`,
         { nombre },
         {
           headers: {

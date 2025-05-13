@@ -7,8 +7,8 @@ const useRegister = () => {
   const navigate = useNavigate();
 
   const register = async (email, pass, user) => {
+    const API_BASE = import.meta.env.VITE_BACKEND_URL;
     const data = { email, pass, user };
-
     try {
       // Mostrar loading mientras se hace el registro
       showLoading({
@@ -17,7 +17,7 @@ const useRegister = () => {
       });
       
 
-      await axios.post("http://localhost:3000/register", data);
+      await axios.post(`${API_BASE}/register`, data);
 
       // Cerrar el loading manualmente
       Swal.close();

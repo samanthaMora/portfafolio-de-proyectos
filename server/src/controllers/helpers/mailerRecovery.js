@@ -11,7 +11,7 @@ const transporter = nodemailer.createTransport({
 });
 
 export const sendRecoveryEmail = async (to, token) => {
-  const recoveryLink = `http://localhost:5173/reset-password/${token}`; // Enlace al frontend
+   const recoveryLink = `${process.env.FRONTEND_URL}/reset-password/${token}`;
 
   const mailOptions = {
     from: process.env.EMAIL_FROM,

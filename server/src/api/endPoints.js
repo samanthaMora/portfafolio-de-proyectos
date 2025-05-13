@@ -11,7 +11,7 @@ import tecRouter from './Proyectos/technologyRoutes.js'
 import projectsRouter from './Proyectos/projectRoutes.js';
 import publicRouter from "./public/publicRouter.js";
 import comentariosRouter from "./public/comentariosRouter.js";
-
+import calificacionesRouter from "./Calificaciones/calificacionesRouter.js";
 
 
 
@@ -26,7 +26,9 @@ router.use('/', userRouter)
 
 router.use("/public", publicRouter);
 
-router.use('/categorias', categoriesRouter)
+router.use('/categorias', categoriesRouter);
+
+router.use("/", calificacionesRouter);
 
 router.use('/etiquetas', tagsRouter);
 

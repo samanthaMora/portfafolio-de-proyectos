@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 
-const API = "http://localhost:3000";
+const API_BASE = import.meta.env.VITE_BACKEND_URL;
 
 export default function TestCrearProyecto() {
   const { id } = useParams(); // id undefined → crear, defined → editar

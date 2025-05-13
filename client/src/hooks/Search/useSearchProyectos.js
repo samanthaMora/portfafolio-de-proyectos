@@ -3,6 +3,7 @@ import { useSearch } from "./useSearchContext";
 import axios from "axios";
 
 const useSearchProyectos = () => {
+  const API_BASE = import.meta.env.VITE_BACKEND_URL;
   const { searchQuery, setSearchQuery } = useSearch();
   const [resultados, setResultados] = useState([]);
   const [page, setPage] = useState(1);
@@ -21,7 +22,7 @@ const useSearchProyectos = () => {
         try {
           const token = localStorage.getItem("accessToken"); // <- cambio aquí
           const res = await axios.get(
-            `http://localhost:3000/searchProyects?query=${searchQuery}&page=${page}&limit=5`,
+            `${API_BASE}/searchProyects?query=${searchQuery}&page=${page}&limit=5`,
             {
               headers: {
                 Authorization: `Bearer ${token}`,

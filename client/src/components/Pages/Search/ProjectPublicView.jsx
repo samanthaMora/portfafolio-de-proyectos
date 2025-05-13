@@ -3,8 +3,9 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
+import RatingSelect from "./RatingSelect";
 
-const API_BASE = "http://localhost:3000";
+const API_BASE = import.meta.env.VITE_BACKEND_URL;
 
 /* ---------- helpers ---------- */
 const authHeaders = () => {
@@ -239,6 +240,7 @@ export default function ProjectPublicView() {
           )}
         </div>
       </div>
+      <RatingSelect proyectoId={proyecto.id || proyecto.proyecto_id} />
 
       {/* comentarios */}
       <div className="card shadow-sm mt-5">

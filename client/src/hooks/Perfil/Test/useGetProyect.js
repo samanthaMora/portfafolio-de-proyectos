@@ -3,7 +3,7 @@ import axios from "axios";
 import renewToken from "../../../utils/renewToken";
 import { showError } from "../../../utils/alerts";
 
-const API_BASE = "http://localhost:3000";
+const API_BASE = import.meta.env.VITE_BACKEND_URL;
 
 export function useGetProyect() {
   const get = async (id) => {

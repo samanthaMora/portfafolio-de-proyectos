@@ -3,14 +3,15 @@ import axios from "axios";
 import renewToken from "../../utils/renewToken.js"; // ajusta la ruta si es necesario
 
 const useAvatar = () => {
+  const API_BASE = import.meta.env.VITE_BACKEND_URL;
   const [avatarUrl, setAvatarUrl] = useState(null);
 
   useEffect(() => {
     const fetchAvatar = async (token) => {
-      const res = await axios.get("http://localhost:3000/get-avatar", {
+      const res = await axios.get(`${API_BASE}/get-avatar`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      setAvatarUrl(`http://localhost:3000${res.data.avatarUrl}`);
+      setAvatarUrl(`${API_BASE}${res.data.avatarUrl}`);
     };
 
     const loadAvatar = async () => {
