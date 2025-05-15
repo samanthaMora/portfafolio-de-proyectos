@@ -9,6 +9,7 @@ import categoriesRouter from './Proyectos/categoryRoutes.js';
 import tagsRouter from './Proyectos/tagRoutes.js';
 import tecRouter from './Proyectos/technologyRoutes.js'
 import projectsRouter from './Proyectos/projectRoutes.js';
+import downloadRepoRouter from './Proyectos/downloadRepoRouter.js';
 import publicRouter from "./public/publicRouter.js";
 import comentariosRouter from "./public/comentariosRouter.js";
 import calificacionesRouter from "./Calificaciones/calificacionesRouter.js";
@@ -23,6 +24,8 @@ router.use('/', pruebasRouter)
 router.use('/', loginRouter)
 
 router.use('/', userRouter)
+
+router.use('/', downloadRepoRouter);
 
 router.use("/public", publicRouter);
 

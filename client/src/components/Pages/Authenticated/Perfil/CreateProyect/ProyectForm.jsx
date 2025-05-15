@@ -5,6 +5,8 @@ import TextArea from "./fields/TextArea.jsx";
 import MultipleSelect from "./fields/MultipleSelect.jsx";
 import QuickAdd from "./fields/QuickAdd.jsx";
 import ProjectImagesUploader from "./ProjectImagesUploader.jsx";
+import isTokenValid from "../../../../../utils/isTokenValid.js";
+import renewToken from "../../../../../utils/renewToken.js";
 
 export default function ProyectoForm({
   proyectoEnEdicion,
@@ -93,40 +95,54 @@ export default function ProyectoForm({
 
         {/* Alta rápida ahora solo con nombres */}
         <QuickAdd
-  label="Categoría"
-  valor={inpCat}
-  setValor={setInpCat}
-  onAdd={() => {
-    pushUnique(cats, setCats, inpCat);
-    setInpCat("");
-  }}
-/>
+          label="Categoría"
+          valor={inpCat}
+          setValor={setInpCat}
+          onAdd={() => {
+            pushUnique(cats, setCats, inpCat);
+            setInpCat("");
+          }}
+        />
 
-<QuickAdd
-  label="Etiqueta"
-  valor={inpTag}
-  setValor={setInpTag}
-  onAdd={() => {
-    pushUnique(tags, setTags, inpTag);
-    setInpTag("");
-  }}
-/>
+        <QuickAdd
+          label="Etiqueta"
+          valor={inpTag}
+          setValor={setInpTag}
+          onAdd={() => {
+            pushUnique(tags, setTags, inpTag);
+            setInpTag("");
+          }}
+        />
 
-<QuickAdd
-  label="Tecnología"
-  valor={inpTech}
-  setValor={setInpTech}
-  onAdd={() => {
-    pushUnique(techs, setTechs, inpTech);
-    setInpTech("");
-  }}
-/>
-
+        <QuickAdd
+          label="Tecnología"
+          valor={inpTech}
+          setValor={setInpTech}
+          onAdd={() => {
+            pushUnique(techs, setTechs, inpTech);
+            setInpTech("");
+          }}
+        />
 
         <button
           type="submit"
           className="btn btn-primary mt-4"
           disabled={loading || !form.titulo.trim() || !form.descripcion.trim()}
+          onClick={async (e) => {
+            /* -- Valida el JWT antes de enviar el formulario -- */
+            if (!isTokenValid()) {
+              e.preventDefault(); // detiene el submit original
+              const ok = await renewToken(); // intenta renovar
+
+              if (ok) {
+                /*  token renovado ➜ vuelve a disparar el submit */
+                e.target.form.requestSubmit(); // mismo formulario
+              } else {
+                /* sin refresh válido → redirección ya hecha en renewToken() */
+                // aquí puedes añadir un toast si lo deseas
+              }
+            }
+          }}
         >
           {loading
             ? isEdit

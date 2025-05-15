@@ -117,6 +117,36 @@ export default function ProjectPublicView() {
 
   const userId = currentUserId();
 
+  const handleDownloadRepo = async () => {
+    // 1. Asegurar que tenemos un ID válido (el objeto puede venir con id o proyecto_id)
+    const repoId = proyecto.id ?? proyecto.proyecto_id;
+    if (!repoId) {
+      alert("No se encontró el ID del proyecto. Intenta recargar la página.");
+      return;
+    }
+
+    try {
+      // 2. Construir la URL correctamente
+      const url = `${API_BASE}/proyectos/${repoId}/repo/download?userId=${proyecto.autor_id}`;
+
+      // 3. Hacer la petición como blob
+      const res = await axios.get(url, { responseType: "blob" });
+
+      // 4. Crear un enlace temporal y disparar la descarga
+      const blobUrl = window.URL.createObjectURL(res.data);
+      const a = document.createElement("a");
+      a.href = blobUrl;
+      a.download = `repo_${repoId}.zip`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(blobUrl);
+    } catch (err) {
+      console.error("Error descargando repo:", err);
+      alert("No se pudo descargar el repositorio.");
+    }
+  };
+
   return (
     <div className="container my-5">
       {/* botón regresar */}
@@ -126,7 +156,6 @@ export default function ProjectPublicView() {
       >
         ← Regresar
       </button>
-
       {/* tarjeta principal */}
       <div className="card shadow-sm">
         <div className="card-body">
@@ -170,7 +199,10 @@ export default function ProjectPublicView() {
               <h5 className="mt-4">Categorías</h5>
               <ul className="list-inline">
                 {proyecto.categorias.map((c) => (
-                  <li key={c} className="list-inline-item badge bg-primary me-1">
+                  <li
+                    key={c}
+                    className="list-inline-item badge bg-primary me-1"
+                  >
                     {c}
                   </li>
                 ))}
@@ -183,7 +215,10 @@ export default function ProjectPublicView() {
               <h5 className="mt-4">Etiquetas</h5>
               <ul className="list-inline">
                 {proyecto.etiquetas.map((e) => (
-                  <li key={e} className="list-inline-item badge bg-secondary me-1">
+                  <li
+                    key={e}
+                    className="list-inline-item badge bg-secondary me-1"
+                  >
                     {e}
                   </li>
                 ))}
@@ -196,7 +231,10 @@ export default function ProjectPublicView() {
               <h5 className="mt-4">Tecnologías</h5>
               <ul className="list-inline">
                 {proyecto.tecnologias.map((t) => (
-                  <li key={t} className="list-inline-item badge bg-success me-1">
+                  <li
+                    key={t}
+                    className="list-inline-item badge bg-success me-1"
+                  >
                     {t}
                   </li>
                 ))}
@@ -240,8 +278,16 @@ export default function ProjectPublicView() {
           )}
         </div>
       </div>
-      <RatingSelect proyectoId={proyecto.id || proyecto.proyecto_id} />
 
+      <button
+        type="button"
+        className="btn btn-outline-success mt-3"
+        onClick={handleDownloadRepo}
+      >
+        Descargar repo (.zip)
+      </button>
+
+      <RatingSelect proyectoId={proyecto.id || proyecto.proyecto_id} />
       {/* comentarios */}
       <div className="card shadow-sm mt-5">
         <div className="card-body">
@@ -261,7 +307,9 @@ export default function ProjectPublicView() {
               </button>
             </form>
           ) : (
-            <p className="text-muted">Inicia sesión para dejar un comentario.</p>
+            <p className="text-muted">
+              Inicia sesión para dejar un comentario.
+            </p>
           )}
 
           {comentarios.length === 0 ? (
