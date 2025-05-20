@@ -28,6 +28,10 @@ import PrivateRoute from "./components/routes/PrivateRoute";
 import { SearchProvider } from "./hooks/Search/useSearchContext.jsx";
 import { PerfilProvider } from "./components/Pages/Authenticated/Perfil/PerfilContext.jsx";
 
+document.documentElement.style.height = "100%"; // html
+document.body.style.height = "100%";            // body
+document.getElementById("root").style.height = "100%"; // #root
+
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <BrowserRouter>
