@@ -36,7 +36,7 @@ export default function ProjectImagesUploader({ projectId, repoUrl }) {
         formData,
         { headers }
       );
-      setStatus("✅ Imágenes subidas");
+      setStatus("Imágenes subidas");
       const res = await axios.get(
         `${API_BASE}/proyectos/${projectId}/images`,
         { headers }
@@ -44,7 +44,7 @@ export default function ProjectImagesUploader({ projectId, repoUrl }) {
       setFiles(res.data.images);
     } catch (err) {
       console.error("Error subiendo imágenes:", err);
-      setStatus("❌ Error al subir imágenes");
+      setStatus("Error al subir imágenes");
     }
   };
 
